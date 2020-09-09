@@ -37,50 +37,50 @@
  * are propagated to the other playing dash.js instances within that layer.
  */
 
-function initiatePlayBack(fallBackLayer, videoList, viewLayer) { 
-    
+function initiatePlayBack(fallBackLayer, videoList, viewLayer) {
+
     if (!fallBackLayer.paused) {
-        $("#fallBackLayer").one("timeupdate", function() {
-            timingObject.update({position: fallBackLayer.currentTime, velocity: 0.0});
+        $("#fallBackLayer").one("timeupdate", function () {
+            timingObject.update({ position: fallBackLayer.currentTime, velocity: 0.0 });
             for (var i = 0; i < videoList.length; i++) {
                 var videoTile = videoList[i];
 
-                if (viewLayer == zoomLayer1){
+                if (viewLayer == zoomLayer1) {
                     zoomLayer2VideoSyncObjects[i] = null;
-                    zoomLayer1VideoSyncObjects[i] = new TIMINGSRC.MediaSync(zoomLayer1VideoElements[i], timingObject); 
+                    zoomLayer1VideoSyncObjects[i] = new TIMINGSRC.MediaSync(zoomLayer1VideoElements[i], timingObject);
                 } else {
                     zoomLayer1VideoSyncObjects[i] = null;
-                    zoomLayer2VideoSyncObjects[i] = new TIMINGSRC.MediaSync(zoomLayer2VideoElements[i], timingObject);                
+                    zoomLayer2VideoSyncObjects[i] = new TIMINGSRC.MediaSync(zoomLayer2VideoElements[i], timingObject);
                 }
-        }
-        }); 
-        setTimeout(function(){
-        
-            $("#fallBackLayer").one("timeupdate", function() {
-                
+            }
+        });
+        setTimeout(function () {
+
+            $("#fallBackLayer").one("timeupdate", function () {
+
                 if (!fallBackLayer.paused) {
-                    timingObject.update({position: fallBackLayer.currentTime + 0.001, velocity: 1.0});
+                    timingObject.update({ position: fallBackLayer.currentTime + 0.001, velocity: 1.0 });
                 }
             });
 
-        }, 2500);  
+        }, 2500);
     } else {
-        timingObject.update({position: fallBackLayer.currentTime, velocity: 0.0});
+        timingObject.update({ position: fallBackLayer.currentTime, velocity: 0.0 });
         for (var i = 0; i < videoList.length; i++) {
             var videoTile = videoList[i];
 
-            if (viewLayer == zoomLayer1){
+            if (viewLayer == zoomLayer1) {
                 zoomLayer2VideoSyncObjects[i] = null;
-                zoomLayer1VideoSyncObjects[i] = new TIMINGSRC.MediaSync(zoomLayer1VideoElements[i], timingObject); 
+                zoomLayer1VideoSyncObjects[i] = new TIMINGSRC.MediaSync(zoomLayer1VideoElements[i], timingObject);
             } else {
                 zoomLayer1VideoSyncObjects[i] = null;
-                zoomLayer2VideoSyncObjects[i] = new TIMINGSRC.MediaSync(zoomLayer2VideoElements[i], timingObject);                
+                zoomLayer2VideoSyncObjects[i] = new TIMINGSRC.MediaSync(zoomLayer2VideoElements[i], timingObject);
             }
         }
     }
 
     var masterVideo;
-        
+
     if (currentZoomLevel == 1) {
 
         masterVideo = "#video1";
@@ -89,38 +89,39 @@ function initiatePlayBack(fallBackLayer, videoList, viewLayer) {
 
         masterVideo = "#video5";
 
-    } 
-    
-    $(masterVideo).one("loadeddata", function() { 
-        
+    }
+
+    $(masterVideo).one("loadeddata", function () {
+
         var playerContainer = [];
-        
+
         if (currentZoomLevel == 1) {
-            
+
             playerContainer = zoomLayer1PlayerObjects;
-            
+
         } else if (currentZoomLevel == 2) {
-            
+
             playerContainer = zoomLayer2PlayerObjects;
-            
+
         }
-        
-        for (var i = 0; i < playerContainer.length; i++) { 
+
+        for (var i = 0; i < playerContainer.length; i++) {
             var player = playerContainer[i];
 
             if (i === 0) {
 
-                if (player.getBitrateInfoListFor("video").length > 1){
+                if (player.getBitrateInfoListFor("video").length > 1) {
                     masterQuality = player.getQualityFor("video");
-                    
-                }  
 
-            } if (i > 0 && masterQuality) {            
+                }
+
+            } if (i > 0 && masterQuality) {
                 player.setQualityFor("video", masterQuality);
 
-        }}
-    
-        if (masterQuality) { 
+            }
+        }
+
+        if (masterQuality) {
             emitBitrateChanges(playerContainer, masterQuality);
         }
     });
@@ -128,36 +129,38 @@ function initiatePlayBack(fallBackLayer, videoList, viewLayer) {
 
 function emitBitrateChanges(playerList, masterQuality) {
 
-    playerList[0].eventBus.addEventListener(MediaPlayer.events.METRIC_CHANGED, function() {
-        
+    playerList[0].eventBus.addEventListener(MediaPlayer.events.METRIC_CHANGED, function () {
+
         var currentQuality = playerList[0].getQualityFor("video");
-        
+
         if (masterQuality != currentQuality) {
             masterQuality = currentQuality;
-            
-            for (var i = 1; i < playerList.length; i++) { 
-                var player = playerList[i];         
 
-                if (i > 0){
+            for (var i = 1; i < playerList.length; i++) {
+                var player = playerList[i];
+
+                if (i > 0) {
                     player.setQualityFor("video", masterQuality);
                 }
-            }  
+            }
 
         }
-        
-    });   
+
+    });
 }
 
+// 当所有tile ready 时候，切换
 function updateViewLayerOnReadyState(videoElementsList, xPosition, yPosition, viewLayer) {
 
     for (var i = 0; i < videoElementsList.length; i++) {
-        
+
         if (!videoElementsList[i].ReadyState === 4) {
             i -= 1;
+            // 没准备好，就循环
         }
-        
-        if (i === 3){
-           updateVideoContainer(xPosition, yPosition, viewLayer, 4500, null); 
+
+        if (i === 3) {
+            updateVideoContainer(xPosition, yPosition, viewLayer, 3000, null);
         }
     }
 }

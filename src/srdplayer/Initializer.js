@@ -49,6 +49,14 @@ var SRDPlayer,
     video6,
     video7,
     video8,
+    video9,
+    video10,
+    video11,
+    video12,
+    video13,
+    video14,
+    video15,
+    video16,
     zoomLayer1VideoElements,
     zoomLayer2VideoElements,
     timingObject,
@@ -59,8 +67,16 @@ var SRDPlayer,
     syncVideo4,
     syncVideo5,
     syncVideo6,
-    syncVideo7, 
+    syncVideo7,
     syncVideo8,
+    syncVideo9,
+    syncVideo10,
+    syncVideo11,
+    syncVideo12,
+    syncVideo13,
+    syncVideo14,
+    syncVideo15,
+    syncVideo16,
     zoomLayer1VideoSyncObjects,
     zoomLayer2VideoSyncObjects,
     visibleElement,
@@ -82,13 +98,13 @@ var SRDPlayer,
     initialAspectRatio,
     fallBackLayerContentWidth,
     fallBackLayerContentHeight,
-    fallBackLayerContentAspectRatio,   
+    fallBackLayerContentAspectRatio,
     zoomLayer1ContentWidth,
     zoomLayer1ContentHeight,
     zoomLayer1ContentAspectRatio,
     zoomLayer2ContentWidth,
     zoomLayer2ContentHeight,
-    zoomLayer2ContentAspectRatio,        
+    zoomLayer2ContentAspectRatio,
     screenAspectRatio,
     contentHasAudio,
     contentAspectRatio,
@@ -119,7 +135,7 @@ var SRDPlayer,
  * document.getElementById("<yourElementId>") 
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
     SRDPlayer = document.getElementById("SRDPlayer");
     videoContainer = document.getElementById("videoContainer");
     bannerbox = document.getElementById("bannerbox");
@@ -134,23 +150,35 @@ $(document).ready(function() {
     video6 = document.getElementById("video6");
     video7 = document.getElementById("video7");
     video8 = document.getElementById("video8");
+    video9 = document.getElementById("video9");
+    video10 = document.getElementById("video10");
+    video11 = document.getElementById("video11");
+    video12 = document.getElementById("video12");
+    video13 = document.getElementById("video13");
+    video14 = document.getElementById("video14");
+    video15 = document.getElementById("video15");
+    video16 = document.getElementById("video16");
     videoController = document.getElementById("videoController");
 
     zoomLayer1VideoElements = [video1, video2, video3, video4];
-    zoomLayer2VideoElements = [video5, video6, video7, video8];  
+    zoomLayer2VideoElements = [video5, video6, video7, video8,
+        video9, video10, video11, video12,
+        video13, video14, video15, video16];
 
     zoomLayer1VideoSyncObjects = [syncVideo1, syncVideo2, syncVideo3, syncVideo4];
-    zoomLayer2VideoSyncObjects = [syncVideo5, syncVideo6, syncVideo7, syncVideo8];
+    zoomLayer2VideoSyncObjects = [syncVideo5, syncVideo6, syncVideo7, syncVideo8,
+        syncVideo9, syncVideo10, syncVideo11, syncVideo12,
+        syncVideo13, syncVideo14, syncVideo15, syncVideo16];
 
     zoomLayer1PlayerObjects = [];
     zoomLayer2PlayerObjects = [];
     spatialOrderingZoomLevel1 = [];
     spatialOrderingZoomLevel2 = [];
-    
+
     fallBackLayer.style.visibility = 'visible';
     zoomLayer1.style.visibility = 'hidden';
-    zoomLayer2.style.visibility = 'hidden';    
-    
+    zoomLayer2.style.visibility = 'hidden';
+
     video1.muted = true;
     video2.muted = true;
     video3.muted = true;
@@ -159,20 +187,28 @@ $(document).ready(function() {
     video6.muted = true;
     video7.muted = true;
     video8.muted = true;
+    video9.muted = true;
+    video10.muted = true;
+    video11.muted = true;
+    video12.muted = true;
+    video13.muted = true;
+    video14.muted = true;
+    video15.muted = true;
+    video16.muted = true;
     getClickPositionEnabled = false;
     fullScreenFlag = false;
     browserType = detectBrowser();
-    
+
     /* Construct Hammer.js instances for gesture events on mobile devices.
        (currently this is not functional due to an import error of the Hammer.js library) */
-    
+
     zoomLayer1Hammer = new Hammer(zoomLayer1, {
-    
-        recognizers: [[Hammer.Pan,{ direction: Hammer.DIRECTION_ALL }],]
+
+        recognizers: [[Hammer.Pan, { direction: Hammer.DIRECTION_ALL }],]
     });
-    
+
     zoomLayer2Hammer = new Hammer(zoomLayer2, {
-    
-        recognizers: [[Hammer.Pan,{ direction: Hammer.DIRECTION_ALL }],]
+
+        recognizers: [[Hammer.Pan, { direction: Hammer.DIRECTION_ALL }],]
     });
 });
