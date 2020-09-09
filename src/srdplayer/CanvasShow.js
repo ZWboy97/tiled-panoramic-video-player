@@ -34,7 +34,8 @@ function startPanoamic(e) {
     container.appendChild(renderer.domElement);
     const geometry = new THREE.SphereBufferGeometry(500, 80, 40); // 球体
     geometry.scale(-1, 1, 1);
-    let texture = new THREE.VideoTexture(fallBackLayer);
+    //let texture = new THREE.VideoTexture(fallBackLayer);
+    var texture = new THREE.CanvasTexture(canvas);
     let material = new THREE.MeshBasicMaterial({ map: texture });
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
