@@ -68,6 +68,7 @@
     <script src="./src/utils/Matchers.js"></script>
     <script src="./src/utils/ServiceBus.js"></script>
     <script src="./src/utils/xml2json.js"></script>
+    <script src="./src/srdplayer/CanvasShow.js"></script>
 
 </head>
 
@@ -176,6 +177,8 @@
             <input type="submit" name="Open video" id="mpdButton" onclick="openVideo()" value="Open video" />
         </div>
         <br>
+        <button id="btnStartCanvas" onclick="startCanvasOnClick()">启动Canvas</button>
+        <canvas id="outputCanvas" width="2560" height="1440" style="width: 1280px; height: 720px;"></canvas>
         <br>
         <br>
         <p id="usageHint">Double click on a video zooms in or out. When zoomed in, the video can also be dragged.</p>
