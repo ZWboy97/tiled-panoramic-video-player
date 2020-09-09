@@ -51,6 +51,7 @@
     <script src="./src/lib/jquery.hammer.js"></script>
     <script src="./src/lib/timingsrc.js"></script>
 
+
     <!--SRD Player JavaScript -->
     <script src="./src/srdplayer/DashLauncher.js"></script>
     <script src="./src/srdplayer/Initializer.js"></script>
@@ -69,7 +70,9 @@
     <script src="./src/utils/ServiceBus.js"></script>
     <script src="./src/utils/xml2json.js"></script>
     <script src="./src/srdplayer/CanvasShow.js"></script>
-
+    <script type="text/javascript" src="./src/lib/three.js"></script>
+    <script type="text/javascript" src="./src/lib/DeviceOrientationControls.js"></script>
+    <script type="text/javascript" src="./src/lib/Orbitcontrols.js"></script>
 </head>
 
 
@@ -178,7 +181,9 @@
         </div>
         <br>
         <button id="btnStartCanvas" onclick="startCanvasOnClick()">启动Canvas</button>
+        <button id="btnStartCanvas" onclick="startPanoamic()">启动全景渲染</button>
         <canvas id="outputCanvas" width="2560" height="1440" style="width: 1280px; height: 720px;"></canvas>
+        <div id="threeContainer" style="width: 1280px; height: 720px;"></div>
         <br>
         <br>
         <p id="usageHint">Double click on a video zooms in or out. When zoomed in, the video can also be dragged.</p>

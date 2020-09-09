@@ -1,7 +1,5 @@
-var canvas;
 var ctx;
 function startCanvasOnClick(e) {
-    canvas = document.getElementById('outputCanvas');
     ctx = canvas.getContext("2d");
     ctx.scale(2, 2);
     ctx.imageSmoothingQuality = "high"
@@ -22,4 +20,35 @@ function processFarme() {
     ctx.drawImage(video15, 640, 360, 320, 180);
     ctx.drawImage(video16, 960, 360, 320, 180);
     requestAnimationFrame(processFarme);
+}
+
+function startPanoamic(e) {
+    var container = document.getElementById("threeContainer");
+    const scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(80, container.clientWidth / container.clientHeight,
+        0.001, 10000);
+    camera.position.set(3, 0.50, 15);
+    camera.target = new THREE.Vector3(0, 0, 0);
+    var renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+    const geometry = new THREE.SphereBufferGeometry(500, 80, 40); // 球体
+    geometry.scale(-1, 1, 1);
+    let texture = new THREE.VideoTexture(fallBackLayer);
+    let material = new THREE.MeshBasicMaterial({ map: texture });
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+    let axisHelper = new THREE.AxesHelper(1000)//每个轴的长度
+    scene.add(axisHelper);
+    const controls = new THREE.OrbitControls(camera, document, renderer.domElement);
+
+    function render() {
+        renderer.render(scene, camera);
+    }
+    function r() {
+        render();
+        controls.update();
+        requestAnimationFrame(r)
+    }
+    r();
 }

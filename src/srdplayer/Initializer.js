@@ -126,7 +126,8 @@ var SRDPlayer,
     zoomLevel1TilesVertical,
     zoomLevel2TilesVertical,
     zoomLayer1Hammer,
-    zoomLayer2Hammer;
+    zoomLayer2Hammer,
+    canvas;
 
 /* Variable assignments to be executed when DOM loading is finished.
  * This is needed to get hooks to DOM elements and do some settings.
@@ -159,6 +160,7 @@ $(document).ready(function () {
     video15 = document.getElementById("video15");
     video16 = document.getElementById("video16");
     videoController = document.getElementById("videoController");
+    canvas = document.getElementById('outputCanvas');
 
     zoomLayer1VideoElements = [video1, video2, video3, video4];
     zoomLayer2VideoElements = [video5, video6, video7, video8,
