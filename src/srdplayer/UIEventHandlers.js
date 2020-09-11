@@ -55,29 +55,113 @@ function onClickEvent(e) {
     }
 
     if (currentZoomLevel == 0) {
+        if (spatialOrderingZoomLevel2.length > 0) {
 
-        viewLayer = zoomLayer1;
-        currentZoomLevel = 1;
+            viewLayer = zoomLayer2;
 
-        // if (fullScreenFlag){ 
+            zoomLayer1Hammer.off('panstart', function (evt) {
+                dragtool.startMoving(zoomLayer1, videoContainer, evt);
+            });
 
-        //     updateVideoContainer(xPosition, yPosition, fallBackLayer, null, "fullscreen zoomed");
+            zoomLayer1Hammer.off('panend', function (evt) {
+                dragtool.stopMoving(videoContainer);
+            });
 
-        // } else {
+            // if (fullScreenFlag){ 
 
-        //     updateVideoContainer(xPosition, yPosition, fallBackLayer, null, 2);
+            //     updateVideoContainer(xPosition, yPosition, fallBackLayer, null, "fullscreen zoomed double");
 
-        // } 
+            // } else {
 
-        ServiceBus.publish("Zoom-level1", [0, 0, viewLayer]);
+            //     updateVideoContainer(xPosition, yPosition, fallBackLayer, null, "double");
 
-        zoomLayer1Hammer.on('panstart', function (evt) {
-            dragtool.startMoving(zoomLayer1, videoContainer, evt);
-        });
+            // } 
 
-        zoomLayer1Hammer.on('panend', function (evt) {
-            dragtool.stopMoving(videoContainer);
-        });
+            zoomLayer1PlayerObjects = [];
+
+            currentZoomLevel = 2;
+
+            ServiceBus.publish("Zoom-level2", [xPosition, yPosition, viewLayer]);
+
+            zoomLayer2Hammer.on('panstart', function (evt) {
+                dragtool.startMoving(zoomLayer2, videoContainer, evt);
+            });
+
+            zoomLayer2Hammer.on('panend', function (evt) {
+                dragtool.stopMoving(videoContainer);
+            });
+
+        } else {
+
+            viewLayer = fallBackLayer;
+
+            zoomLayer1Hammer.off('panstart', function (evt) {
+                dragtool.startMoving(zoomLayer1, videoContainer, evt);
+            });
+
+            zoomLayer1Hammer.off('panend', function (evt) {
+                dragtool.stopMoving(videoContainer);
+            });
+
+            // if (fullScreenFlag){ 
+
+            //     if (browserWindowZoomedTo == 0){
+
+            //         updateVideoContainer(xPosition, yPosition, viewLayer, null, 0.5);
+
+            //     } else {
+
+            //         updateVideoContainer(xPosition, yPosition, viewLayer, null, "fullscreen");
+
+            //         browserWindowZoomedTo = 0;
+            //     } 
+
+            // } else {
+
+            //     if (fullScreenZoomedTo == 0 ){
+
+            //         updateVideoContainer(xPosition, yPosition, viewLayer, null, 0.5);
+
+            //     } else if (fullScreenZoomedTo == 1 || fullScreenZoomedTo == 2 ) {
+
+            //        updateVideoContainer(xPosition, yPosition, viewLayer, null, 1.0);
+
+            //     } else {
+
+            //        updateVideoContainer(xPosition, yPosition, viewLayer, null, 0.5);
+
+            //     } 
+
+            // }
+
+            zoomLayer1PlayerObjects = [];
+
+            currentZoomLevel = 0;
+
+        }
+
+        // viewLayer = zoomLayer1;
+        // currentZoomLevel = 1;
+
+        // // if (fullScreenFlag){ 
+
+        // //     updateVideoContainer(xPosition, yPosition, fallBackLayer, null, "fullscreen zoomed");
+
+        // // } else {
+
+        // //     updateVideoContainer(xPosition, yPosition, fallBackLayer, null, 2);
+
+        // // } 
+
+        // ServiceBus.publish("Zoom-level1", [0, 0, viewLayer]);
+
+        // zoomLayer1Hammer.on('panstart', function (evt) {
+        //     dragtool.startMoving(zoomLayer1, videoContainer, evt);
+        // });
+
+        // zoomLayer1Hammer.on('panend', function (evt) {
+        //     dragtool.stopMoving(videoContainer);
+        // });
 
     } else if (currentZoomLevel == 1) {
 
