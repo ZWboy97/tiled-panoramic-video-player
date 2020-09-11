@@ -37,15 +37,19 @@ function startPanoamic(e) {
     geometry.scale(-1, 1, 1);
     //let texture = new THREE.VideoTexture(fallBackLayer);
     var texture = new THREE.CanvasTexture(canvas);
+    texture.needsUpdate = true;
     let material = new THREE.MeshBasicMaterial({ map: texture });
-    const mesh = new THREE.Mesh(geometry, material);
+    let mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
     let axisHelper = new THREE.AxesHelper(1000)//每个轴的长度
     scene.add(axisHelper);
-    const controls = new THREE.OrbitControls(camera, document, renderer.domElement);
+    let controls = new THREE.OrbitControls(camera, document, renderer.domElement);
 
     function render() {
         renderer.render(scene, camera);
+        // 更新canvas纹理
+        material.map.needsUpdate = true;
+        scene.add(mesh);
     }
     function r() {
         render();
