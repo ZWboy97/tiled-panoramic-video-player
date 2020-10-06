@@ -49,7 +49,6 @@ function startPanoamic(e) {
         renderer.render(scene, camera);
         // 更新canvas纹理
         material.map.needsUpdate = true;
-        scene.add(mesh);
     }
     function r() {
         render();

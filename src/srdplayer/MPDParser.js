@@ -42,8 +42,8 @@
  */
 
 "use strict";
-   
-var MPDParser = function() {
+
+var MPDParser = function () {
   ServiceBus.subscribe("MPD-incoming", this.parseMPD, "MPDParser");
 };
 
@@ -51,19 +51,20 @@ MPDParser.prototype = {
   parseMPD: function (data) {
 
     mpdURL = data[0];
-    
-    var x2js = new X2JS(matchers,'', true);
+
+    var x2js = new X2JS(matchers, '', true);
     var mpdJSON = x2js.xml_str2json(data[1]);
+    console.log('mpdJson', mpdJSON);
 
     if ($.isArray(mpdJSON.Period.AdaptationSet)) {
 
       if ("SupplementalProperty" in mpdJSON.Period.AdaptationSet[0]) {
 
-          ServiceBus.publish("SRD-MPD", [mpdURL, mpdJSON]);      
+        ServiceBus.publish("SRD-MPD", [mpdURL, mpdJSON]);
 
       } else {
 
-          ServiceBus.publish("Non-SRD-MPD", [mpdURL, mpdJSON]);
+        ServiceBus.publish("Non-SRD-MPD", [mpdURL, mpdJSON]);
 
       }
 
@@ -71,15 +72,15 @@ MPDParser.prototype = {
 
       if ("SupplementalProperty" in mpdJSON.Period.AdaptationSet) {
 
-          ServiceBus.publish("SRD-MPD", [mpdURL, mpdJSON]);
+        ServiceBus.publish("SRD-MPD", [mpdURL, mpdJSON]);
 
       } else {
 
-          ServiceBus.publish("Non-SRD-MPD", [mpdURL, mpdJSON]);
+        ServiceBus.publish("Non-SRD-MPD", [mpdURL, mpdJSON]);
 
       }
     }
 
-    
+
   }
 };

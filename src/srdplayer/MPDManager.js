@@ -34,12 +34,13 @@
 
 // Instantiates parser and retriever objects for MPD processing.
 
-var MPDManager = function(mpdURL) {
-    new(normalVideoAttacher);
-    new(tiledVideoAttacher);
-    new(MPDParser);
-    var mpdRetriever = new(MPDRetriever);
-    mpdRetriever.params = ({mpdURL: mpdURL});
+var MPDManager = function (mpdURL) {
+    // 创建实例，并绑定到ServiceBus上
+    new (normalVideoAttacher);
+    new (tiledVideoAttacher);
+    new (MPDParser);
+    var mpdRetriever = new (MPDRetriever);
+    mpdRetriever.params = ({ mpdURL: mpdURL });
     mpdRetriever.getMPD();
 };
 

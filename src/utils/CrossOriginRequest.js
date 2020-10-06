@@ -32,55 +32,55 @@
 * THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-function crossOriginRequest (url, callback){
-    
-    var isIE8 = window.XDomainRequest ? true : false;
-    var invocation = createCrossOriginRequest();
+function crossOriginRequest(url, callback) {
 
-    function createCrossOriginRequest(url, crossOriginRequestHandler) {
-      var request;
-      if (isIE8) {
-        request = new window.XDomainRequest();
-        }
-        else {
-          request = new XMLHttpRequest();
-        }
-      return request;
+  var isIE8 = window.XDomainRequest ? true : false;
+  var invocation = createCrossOriginRequest();
+
+  function createCrossOriginRequest(url, crossOriginRequestHandler) {
+    var request;
+    if (isIE8) {
+      request = new window.XDomainRequest();
     }
+    else {
+      request = new XMLHttpRequest();
+    }
+    return request;
+  }
 
-    function callOtherDomain() {
-      if (invocation) {
-        if(isIE8) {
-          invocation.onload = crossOriginRequestHandler;
-          invocation.open("GET", url, true);
-          invocation.send();
-        }
-        else {
-          invocation.open('GET', url, true);
-          invocation.onreadystatechange = crossOriginRequestHandler;
-          invocation.send();
-        }
+  function callOtherDomain() {
+    if (invocation) {
+      if (isIE8) {
+        invocation.onload = crossOriginRequestHandler;
+        invocation.open("GET", url, true);
+        invocation.send();
       }
       else {
-        console.log("callOtherDomain: " + "No Invocation TookPlace At All");
+        invocation.open('GET', url, true);
+        invocation.onreadystatechange = crossOriginRequestHandler;
+        invocation.send();
       }
     }
+    else {
+      console.log("callOtherDomain: " + "No Invocation TookPlace At All");
+    }
+  }
 
-    function crossOriginRequestHandler(evtXHR) {
-      if (invocation.readyState == 4) {
-          if (invocation.status == 200) {
-              var response = invocation.responseText;
-              
-              callback(null, response);
-          }
-          else {
-              callback(invocation.statusText, null);
-              console.log("crossOriginRequestHandler: " + "Invocation Errors Occured");
-          }
+  function crossOriginRequestHandler(evtXHR) {
+    if (invocation.readyState == 4) {
+      if (invocation.status == 200) {
+        var response = invocation.responseText;
+
+        callback(null, response);
+      }
+      else {
+        callback(invocation.statusText, null);
+        console.log("crossOriginRequestHandler: " + "Invocation Errors Occured");
       }
     }
-    
-    callOtherDomain();
+  }
+
+  callOtherDomain();
 }
 
 

@@ -42,38 +42,39 @@
 "use strict";
 
 var MPDRetriever = function (params) {
-    this.params = params;
+  this.params = params;
 };
 
 MPDRetriever.prototype = {
   retrieveAndConvert: function (mpdURL, callback) {
 
-    crossOriginRequest(mpdURL, function(err, data) {
+    crossOriginRequest(mpdURL, function (err, data) {
 
       if (err) {
 
-      return err;
-    }   
-      callback(null, data); 
-  }); 
-  
-},
+        return err;
+      }
+      callback(null, data);
+    });
+
+  },
 
   getMPD: function () {
- 
+
     var mpdURL = this.params.mpdURL;
 
-    this.retrieveAndConvert (mpdURL, function(err, data) {
+    this.retrieveAndConvert(mpdURL, function (err, data) {
 
       if (err) {
 
-        console.log(err);    
-      
+        console.log(err);
+
       } else {
-      
+
         ServiceBus.publish("MPD-incoming", [mpdURL, data]);
 
       }
 
-});}
+    });
+  }
 };

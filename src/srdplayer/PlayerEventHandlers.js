@@ -41,7 +41,10 @@ function initiatePlayBack(fallBackLayer, videoList, viewLayer) {
 
     if (!fallBackLayer.paused) {
         $("#fallBackLayer").one("timeupdate", function () {
-            timingObject.update({ position: fallBackLayer.currentTime, velocity: 0.0 });
+            timingObject.update({
+                position: fallBackLayer.currentTime,
+                velocity: 1.0 // step
+            });
             for (var i = 0; i < videoList.length; i++) {
                 var videoTile = videoList[i];
 
@@ -54,21 +57,21 @@ function initiatePlayBack(fallBackLayer, videoList, viewLayer) {
                 }
             }
         });
-        setTimeout(function () {
-
-            $("#fallBackLayer").one("timeupdate", function () {
-
-                if (!fallBackLayer.paused) {
-                    timingObject.update({ position: fallBackLayer.currentTime + 0.001, velocity: 1.0 });
-                }
-            });
-
-        }, 2500);
+        // setTimeout(function () {
+        //     $("#fallBackLayer").one("timeupdate", function () {
+        //         console.log("time update")
+        //         if (!fallBackLayer.paused) {
+        //             timingObject.update({
+        //                 position: fallBackLayer.currentTime + 0.001,
+        //                 velocity: 1.0
+        //             });
+        //         }
+        //     });
+        // }, 500);
     } else {
         timingObject.update({ position: fallBackLayer.currentTime, velocity: 0.0 });
         for (var i = 0; i < videoList.length; i++) {
             var videoTile = videoList[i];
-
             if (viewLayer == zoomLayer1) {
                 zoomLayer2VideoSyncObjects[i] = null;
                 zoomLayer1VideoSyncObjects[i] = new TIMINGSRC.MediaSync(zoomLayer1VideoElements[i], timingObject);
@@ -79,45 +82,33 @@ function initiatePlayBack(fallBackLayer, videoList, viewLayer) {
         }
     }
 
+    // 以分开的第一个视频作为masterVideo，由其决定整体的视频码率
+    // 之后采用基于最优化的方式来选择整体视频码率
     var masterVideo;
-
     if (currentZoomLevel == 1) {
-
         masterVideo = "#video1";
-
     } else if (currentZoomLevel == 2) {
-
         masterVideo = "#video5";
-
     }
 
+    // 整体质量选择
     $(masterVideo).one("loadeddata", function () {
-
+        // 在第一帧数据加载成功之后触发
         var playerContainer = [];
-
         if (currentZoomLevel == 1) {
-
             playerContainer = zoomLayer1PlayerObjects;
-
         } else if (currentZoomLevel == 2) {
-
             playerContainer = zoomLayer2PlayerObjects;
-
         }
 
         for (var i = 0; i < playerContainer.length; i++) {
             var player = playerContainer[i];
-
             if (i === 0) {
-
                 if (player.getBitrateInfoListFor("video").length > 1) {
                     masterQuality = player.getQualityFor("video");
-
                 }
-
             } if (i > 0 && masterQuality) {
                 player.setQualityFor("video", masterQuality);
-
             }
         }
 
@@ -127,15 +118,13 @@ function initiatePlayBack(fallBackLayer, videoList, viewLayer) {
     });
 }
 
+// 更改整体的视频质量
 function emitBitrateChanges(playerList, masterQuality) {
 
     playerList[0].eventBus.addEventListener(MediaPlayer.events.METRIC_CHANGED, function () {
-
         var currentQuality = playerList[0].getQualityFor("video");
-
         if (masterQuality != currentQuality) {
             masterQuality = currentQuality;
-
             for (var i = 1; i < playerList.length; i++) {
                 var player = playerList[i];
 
@@ -143,9 +132,7 @@ function emitBitrateChanges(playerList, masterQuality) {
                     player.setQualityFor("video", masterQuality);
                 }
             }
-
         }
-
     });
 }
 
@@ -156,11 +143,8 @@ function updateViewLayerOnReadyState(videoElementsList, xPosition, yPosition, vi
 
         if (!videoElementsList[i].ReadyState === 4) {
             i -= 1;
-            // 没准备好，就循环
-        }
-
-        if (i === 3) {
-            updateVideoContainer(xPosition, yPosition, viewLayer, 3000, null);
+            // 没准备好，循环
         }
     }
+    updateVideoContainer(xPosition, yPosition, viewLayer, 1000, null);
 }

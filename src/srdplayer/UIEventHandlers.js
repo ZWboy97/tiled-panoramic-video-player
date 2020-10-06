@@ -499,7 +499,7 @@ function setVisibleElement(visibleElement) {
 
     } else if (visibleElement === "zoomlayer2") {
         zoomLayer2.style.visibility = "visible";
-        fallBackLayer.style.visibility = "hidden";
+        fallBackLayer.style.visibility = "visible";
         zoomLayer1.style.visibility = "hidden";
         bannerbox.style.visibility = "hidden";
 
